@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TARS Enterprise Accounting & Budgeting System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        tars: {
+                            blue: '#0A1E85',
+                            purple: '#5C1294',
+                            pink: '#D90479',
+                            dark: '#0B132B',
+                            light: '#F8FAFC',
+                            card: '#FFFFFF'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-100 text-slate-800 antialiased overflow-x-hidden">
+
+    <div id="app" class="flex h-screen w-screen overflow-hidden">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+            <!-- Brand Header -->
+            <div class="h-18 flex items-center px-6 bg-gradient-to-r from-[#0A1E85] to-[#5C1294] text-white shadow-md">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center font-extrabold text-xl tracking-wider text-pink-400">
+                        T
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg tracking-wide block leading-tight text-white">TARS</span>
+                        <span class="text-[10px] text-pink-300 font-semibold uppercase tracking-widest">Enterprise Accounting</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex-1 overflow-y-auto px-4 py-4 space-y-1">
+                <div class="text-[10px] uppercase tracking-wider text-slate-500 font-bold px-3 mb-2">Menu Utama</div>
+                
+                <a href="#dashboard" onclick="switchTab('dashboard')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-white bg-gradient-to-r from-[#0A1E85] to-[#5C1294] shadow-md">
+                    <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+                    <span>Dashboard Utama</span>
+                </a>
+                
+                <a href="#divisi-budget" onclick="switchTab('divisi-budget')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-building-user w-5 text-center text-pink-400"></i>
+                    <span>Top Up & Budget Divisi</span>
+                </a>
+
+                <a href="#petty-cash" onclick="switchTab('petty-cash')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-wallet w-5 text-center text-purple-400"></i>
+                    <span>Petty Cash Cabang</span>
+                </a>
+
+                <div class="text-[10px] uppercase tracking-wider text-slate-500 font-bold px-3 mt-6 mb-2">Akuntansi & Keuangan</div>
+
+                <a href="#jurnal" onclick="switchTab('jurnal')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-book-journal-quills w-5 text-center"></i>
+                    <span>Jurnal Akuntansi</span>
+                </a>
+
+                <a href="#coa" onclick="switchTab('coa')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-sitemap w-5 text-center"></i>
+                    <span>Chart of Accounts (COA)</span>
+                </a>
+
+                <a href="#buku-besar" onclick="switchTab('buku-besar')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-book w-5 text-center"></i>
+                    <span>Buku Besar (Ledger)</span>
+                </a>
+
+                <a href="#neraca-saldo" onclick="switchTab('neraca-saldo')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-balance-scale w-5 text-center"></i>
+                    <span>Neraca Saldo (Trial Bal)</span>
+                </a>
+
+                <a href="#laba-rugi" onclick="switchTab('laba-rugi')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-file-invoice-dollar w-5 text-center text-emerald-400"></i>
+                    <span>Laba Rugi & Laporan</span>
+                </a>
+
+                <div class="text-[10px] uppercase tracking-wider text-slate-500 font-bold px-3 mt-6 mb-2">Operasional</div>
+
+                <a href="#pengajuan" onclick="switchTab('pengajuan')" class="nav-item flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-file-signature w-5 text-center"></i>
+                    <span>Pengajuan Dana</span>
+                </a>
+            </div>
+
+            <!-- User Footer Profile -->
+            <div class="p-4 bg-slate-950 border-t border-slate-800 flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#0A1E85] to-[#D90479] flex items-center justify-center font-bold text-white text-sm">
+                    AD
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-xs font-bold text-white truncate">Administrator TARS</div>
+                    <div class="text-[10px] text-slate-400 truncate">finance@tars-enterprise.id</div>
+                </div>
+                <button onclick="alertBox('Fitur Keluar Akun')" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="flex-1 flex flex-col min-w-0 lg:pl-64">
+            
+            <!-- Top Header Bar -->
+            <header class="h-18 glass-header border-b border-slate-200 px-4 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-slate-600 hover:text-slate-900 text-xl focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <h1 id="page-title" class="text-lg lg:text-xl font-bold text-slate-900 leading-tight">Dashboard Utama</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">Sistem Informasi Keuangan, Budgeting Divisi, dan Petty Cash Cabang TARS</p>
+                    </div>
+                </div>
+
+                <!-- Universal Date Filter & Actions -->
+                <div class="flex items-center space-x-3">
+                    <div class="hidden md:flex items-center space-x-2 bg-white border border-slate-300 rounded-xl px-3 py-1.5 shadow-sm text-xs">
+                        <i class="fa-solid fa-calendar-days text-slate-400"></i>
+                        <span class="font-semibold text-slate-600">Periode:</span>
+                        <select id="global-date-filter" onchange="applyGlobalFilter()" class="bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer">
+                            <option value="this_month">Bulan Ini (Juni 2026)</option>
+                            <option value="last_month">Bulan Lalu (Mei 2026)</option>
+                            <option value="q2">Kuartal II 2026</option>
+                            <option value="all">Sepanjang Tahun 2026</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="openModal('modal-jurnal')" class="bg-gradient-to-r from-[#0A1E85] to-[#5C1294] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-indigo-500/20 hover:opacity-95 transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="hidden sm:inline">Entri Jurnal Baru</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6">
+                
+                <!-- TAB 1: DASHBOARD UTAMA -->
+                <section id="tab-dashboard" class="tab-content space-y-6">
+                    <!-- Stat Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute right-3 top-3 w-10 h-10 rounded-xl bg-blue-50 text-[#0A1E85] flex items-center justify-center text-lg"><i class="fa-solid fa-wallet"></i></div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Kas & Bank</span>
+                            <div class="text-2xl font-extrabold text-slate-900 mt-2">Rp 1.485.200.000</div>
+                            <div class="text-[11px] text-emerald-600 font-semibold mt-1 flex items-center"><i class="fa-solid fa-arrow-trend-up mr-1"></i> +12.4% dari bulan lalu</div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute right-3 top-3 w-10 h-10 rounded-xl bg-purple-50 text-[#5C1294] flex items-center justify-center text-lg"><i class="fa-solid fa-building-user"></i></div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Budget Divisi</span>
+                            <div class="text-2xl font-extrabold text-slate-900 mt-2">Rp 850.000.000</div>
+                            <div class="text-[11px] text-purple-600 font-semibold mt-1">Alokasi 6 Divisi Aktif</div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute right-3 top-3 w-10 h-10 rounded-xl bg-pink-50 text-[#D90479] flex items-center justify-center text-lg"><i class="fa-solid fa-coins"></i></div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Petty Cash (5 Cabang)</span>
+                            <div class="text-2xl font-extrabold text-slate-900 mt-2">Rp 47.500.000</div>
+                            <div class="text-[11px] text-pink-600 font-semibold mt-1">Total Sisa Kas Kecil Cabang</div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute right-3 top-3 w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Laba Bersih (YTD)</span>
+                            <div class="text-2xl font-extrabold text-emerald-600 mt-2">Rp 324.600.000</div>
+                            <div class="text-[11px] text-slate-500 font-semibold mt-1">Margin Profit 28.5%</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Breakdown Charts & Highlights -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Alokasi Budget Divisi Chart Mock -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h2 class="font-bold text-slate-900 text-base">Utilisasi Budget per Divisi</h2>
+                                    <p class="text-xs text-slate-500">Perbandingan total alokasi vs realisasi pemakaian divisi</p>
+                                </div>
+                                <button onclick="switchTab('divisi-budget')" class="text-xs font-bold text-[#0A1E85] hover:underline">Kelola Divisi &rarr;</button>
+                            </div>
+                            
+                            <div class="space-y-4 my-2">
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-700">Divisi Operasional & Medis</span>
+                                        <span class="text-[#0A1E85]">Rp 185 Juta / Rp 250 Juta (74%)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div class="bg-[#0A1E85] h-full rounded-full" style="width: 74%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-700">Divisi Pemasaran & Growth</span>
+                                        <span class="text-[#5C1294]">Rp 140 Juta / Rp 200 Juta (70%)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div class="bg-[#5C1294] h-full rounded-full" style="width: 70%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-700">Divisi IT & Teknologi</span>
+                                        <span class="text-[#D90479]">Rp 135 Juta / Rp 180 Juta (75%)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div class="bg-[#D90479] h-full rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-700">Divisi HRD & General Affairs</span>
+                                        <span class="text-amber-600">Rp 75 Juta / Rp 120 Juta (62%)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div class="bg-amber-500 h-full rounded-full" style="width: 62%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <span>*Top up dana penambahan budget dilakukan eksklusif pada menu Budget Divisi.</span>
+                                <span class="font-bold text-slate-700">Total Sisa Budget: Rp 260.000.000</span>
+                            </div>
+                        </div>
+
+                        <!-- Ringkasan Petty Cash 5 Cabang -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="font-bold text-slate-900 text-base">Petty Cash 5 Cabang</h2>
+                                    <button onclick="switchTab('petty-cash')" class="text-xs font-bold text-[#D90479] hover:underline">Detail &rarr;</button>
+                                </div>
+                                <p class="text-xs text-slate-500 mb-4">Posisi kas kecil operasional harian tiap cabang saat ini.</p>
+                                
+                                <div class="space-y-3">
+                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-xs text-slate-800">Cabang Jakarta Pusat</div>
+                                            <div class="text-[10px] text-slate-500">Plafon: Rp 15.000.000</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-extrabold text-xs text-emerald-600">Rp 11.250.000</div>
+                                            <span class="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">Aman</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-xs text-slate-800">Cabang Tangerang BSD</div>
+                                            <div class="text-[10px] text-slate-500">Plafon: Rp 15.000.000</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-extrabold text-xs text-amber-600">Rp 3.400.000</div>
+                                            <span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-bold">Reimburse</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-xs text-slate-800">Cabang Bandung Riau</div>
+                                            <div class="text-[10px] text-slate-500">Plafon: Rp 10.000.000</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-extrabold text-xs text-emerald-600">Rp 7.800.000</div>
+                                            <span class="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">Aman</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-xs text-slate-800">Cabang Surabaya Darmo</div>
+                                            <div class="text-[10px] text-slate-500">Plafon: Rp 10.000.000</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-extrabold text-xs text-emerald-600">Rp 8.100.000</div>
+                                            <span class="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">Aman</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-xs text-slate-800">Cabang Bali Sunset</div>
+                                            <div class="text-[10px] text-slate-500">Plafon: Rp 10.000.000</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-extrabold text-xs text-amber-600">Rp 2.950.000</div>
+                                            <span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-bold">Reimburse</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="switchTab('petty-cash')" class="mt-4 w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Kelola Transaksi Petty Cash</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 2: TOP UP & BUDGET DIVISI -->
+                <section id="tab-divisi-budget" class="tab-content hidden space-y-6">
+                    <div class="bg-gradient-to-r from-[#0A1E85] via-[#5C1294] to-[#D90479] text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest bg-white/25 px-3 py-1 rounded-full font-bold">Manajemen Terpusat</span>
+                            <h2 class="text-xl md:text-2xl font-extrabold mt-2">Top Up & Alokasi Budget Divisi TARS</h2>
+                            <p class="text-xs md:text-sm text-pink-100 mt-1 max-w-2xl">Pengelolaan dana penambahan (Top Up) dan plafon budget dilakukan mutlak untuk divisi perusahaan (Bukan untuk cabang operasional harian).</p>
+                        </div>
+                        <button onclick="openModal('modal-topup-divisi')" class="bg-white text-[#0A1E85] font-extrabold px-5 py-2.5 rounded-xl text-xs shadow-lg hover:bg-slate-100 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-plus text-[#D90479]"></i>
+                            <span>Top Up Dana Divisi Baru</span>
+                        </button>
+                    </div>
+
+                    <!-- Divisi Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Card Divisi 1 -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-extrabold uppercase bg-blue-50 text-[#0A1E85] px-2.5 py-1 rounded-lg">Divisi Utama</span>
+                                    <span class="text-xs text-slate-400 font-bold">ID: DIV-01</span>
+                                </div>
+                                <h3 class="font-bold text-base text-slate-900">Operasional & Medis</h3>
+                                <p class="text-xs text-slate-500 mt-1">Kepala: Dr. Haryanto, Sp.M</p>
+
+                                <div class="mt-4 space-y-2 pt-4 border-t border-slate-100">
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Total Budget Plafon:</span>
+                                        <span class="font-extrabold text-slate-800">Rp 250.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Akumulasi Top Up:</span>
+                                        <span class="font-extrabold text-[#0A1E85]">+ Rp 50.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Realisasi Terpakai:</span>
+                                        <span class="font-extrabold text-pink-600">Rp 185.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs bg-slate-50 p-2 rounded-lg font-bold">
+                                        <span class="text-slate-700">Sisa Saldo Budget:</span>
+                                        <span class="text-emerald-600">Rp 115.000.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex space-x-2">
+                                <button onclick="openModal('modal-topup-divisi')" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-[#0A1E85] font-bold text-xs rounded-xl transition">Top Up Dana</button>
+                                <button onclick="alertBox('Melihat Detail Mutasi Divisi Operasional')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Card Divisi 2 -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-extrabold uppercase bg-purple-50 text-[#5C1294] px-2.5 py-1 rounded-lg">Divisi Komersial</span>
+                                    <span class="text-xs text-slate-400 font-bold">ID: DIV-02</span>
+                                </div>
+                                <h3 class="font-bold text-base text-slate-900">Pemasaran & Growth</h3>
+                                <p class="text-xs text-slate-500 mt-1">Kepala: Siska Maharani, MM</p>
+
+                                <div class="mt-4 space-y-2 pt-4 border-t border-slate-100">
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Total Budget Plafon:</span>
+                                        <span class="font-extrabold text-slate-800">Rp 200.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Akumulasi Top Up:</span>
+                                        <span class="font-extrabold text-[#0A1E85]">+ Rp 30.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Realisasi Terpakai:</span>
+                                        <span class="font-extrabold text-pink-600">Rp 140.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs bg-slate-50 p-2 rounded-lg font-bold">
+                                        <span class="text-slate-700">Sisa Saldo Budget:</span>
+                                        <span class="text-emerald-600">Rp 90.000.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex space-x-2">
+                                <button onclick="openModal('modal-topup-divisi')" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-[#0A1E85] font-bold text-xs rounded-xl transition">Top Up Dana</button>
+                                <button onclick="alertBox('Melihat Detail Mutasi Divisi Pemasaran')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Card Divisi 3 -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-extrabold uppercase bg-pink-50 text-[#D90479] px-2.5 py-1 rounded-lg">Divisi Teknis</span>
+                                    <span class="text-xs text-slate-400 font-bold">ID: DIV-03</span>
+                                </div>
+                                <h3 class="font-bold text-base text-slate-900">IT & Pengembangan Sistem</h3>
+                                <p class="text-xs text-slate-500 mt-1">Kepala: Bayu Wicaksono, S.Kom</p>
+
+                                <div class="mt-4 space-y-2 pt-4 border-t border-slate-100">
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Total Budget Plafon:</span>
+                                        <span class="font-extrabold text-slate-800">Rp 180.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Akumulasi Top Up:</span>
+                                        <span class="font-extrabold text-[#0A1E85]">+ Rp 40.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Realisasi Terpakai:</span>
+                                        <span class="font-extrabold text-pink-600">Rp 135.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs bg-slate-50 p-2 rounded-lg font-bold">
+                                        <span class="text-slate-700">Sisa Saldo Budget:</span>
+                                        <span class="text-emerald-600">Rp 85.000.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex space-x-2">
+                                <button onclick="openModal('modal-topup-divisi')" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-[#0A1E85] font-bold text-xs rounded-xl transition">Top Up Dana</button>
+                                <button onclick="alertBox('Melihat Detail Mutasi Divisi IT')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Top Up Dana Divisi -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Riwayat Top Up & Penambahan Dana Divisi</h3>
+                                <p class="text-xs text-slate-500">Catatan resmi persetujuan top up dana untuk setiap divisi TARS</p>
+                            </div>
+                            <button onclick="alertBox('Mengekspor Riwayat Top Up')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition"><i class="fa-solid fa-download mr-1.5"></i> Ekspor</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <th class="p-4 font-bold">Tanggal</th>
+                                        <th class="p-4 font-bold">Divisi Penerima</th>
+                                        <th class="p-4 font-bold">Nominal Top Up</th>
+                                        <th class="p-4 font-bold">Disetujui Oleh</th>
+                                        <th class="p-4 font-bold">Keterangan / Keperluan</th>
+                                        <th class="p-4 font-bold text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">12 Jun 2026</td>
+                                        <td class="p-4 font-bold text-[#0A1E85]">Divisi Operasional & Medis</td>
+                                        <td class="p-4 font-extrabold text-emerald-600">+ Rp 25.000.000</td>
+                                        <td class="p-4">Direktur Keuangan</td>
+                                        <td class="p-4">Penambahan pengadaan alat medis darurat triwulan II</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold text-[10px]">Disetujui</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">05 Jun 2026</td>
+                                        <td class="p-4 font-bold text-[#5C1294]">Divisi Pemasaran & Growth</td>
+                                        <td class="p-4 font-extrabold text-emerald-600">+ Rp 30.000.000</td>
+                                        <td class="p-4">CFO TARS</td>
+                                        <td class="p-4">Kampanye digital ads nasional & event peluncuran cabang baru</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold text-[10px]">Disetujui</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">28 May 2026</td>
+                                        <td class="p-4 font-bold text-[#D90479]">Divisi IT & Pengembangan Sistem</td>
+                                        <td class="p-4 font-extrabold text-emerald-600">+ Rp 40.000.000</td>
+                                        <td class="p-4">Direktur Utama</td>
+                                        <td class="p-4">Upgrade server cloud enterprise & keamanan data pasien</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold text-[10px]">Disetujui</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 3: PETTY CASH KHUSUS 5 CABANG -->
+                <section id="tab-petty-cash" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-widest bg-pink-50 text-[#D90479] px-3 py-1 rounded-full font-bold">Operasional Harian</span>
+                            <h2 class="text-xl font-extrabold text-slate-900 mt-2">Petty Cash (Kas Kecil) 5 Cabang TARS</h2>
+                            <p class="text-xs text-slate-500 mt-1">Pencatatan pengeluaran operasional kecil di masing-masing cabang dengan sistem *Imprest Fund*.</p>
+                        </div>
+                        <button onclick="openModal('modal-petty-cash')" class="bg-gradient-to-r from-[#5C1294] to-[#D90479] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-purple-500/20 hover:opacity-95 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-receipt"></i>
+                            <span>Catat Pengeluaran Petty Cash</span>
+                        </button>
+                    </div>
+
+                    <!-- 5 Cabang Selector Tabs -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <button onclick="switchBranch(1)" id="branch-btn-1" class="branch-btn p-4 bg-gradient-to-br from-[#0A1E85] to-[#5C1294] text-white rounded-2xl shadow-md text-left transition transform hover:-translate-y-0.5">
+                            <div class="text-[10px] text-pink-200 font-bold uppercase">Cabang 01</div>
+                            <div class="font-bold text-sm mt-1">Jakarta Pusat</div>
+                            <div class="text-xs mt-2 text-indigo-100 font-extrabold">Sisa: Rp 11.250.000</div>
+                        </button>
+
+                        <button onclick="switchBranch(2)" id="branch-btn-2" class="branch-btn p-4 bg-white text-slate-700 border border-slate-200 rounded-2xl shadow-sm text-left transition transform hover:-translate-y-0.5">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Cabang 02</div>
+                            <div class="font-bold text-sm mt-1">Tangerang BSD</div>
+                            <div class="text-xs mt-2 text-amber-600 font-extrabold">Sisa: Rp 3.400.000</div>
+                        </button>
+
+                        <button onclick="switchBranch(3)" id="branch-btn-3" class="branch-btn p-4 bg-white text-slate-700 border border-slate-200 rounded-2xl shadow-sm text-left transition transform hover:-translate-y-0.5">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Cabang 03</div>
+                            <div class="font-bold text-sm mt-1">Bandung Riau</div>
+                            <div class="text-xs mt-2 text-emerald-600 font-extrabold">Sisa: Rp 7.800.000</div>
+                        </button>
+
+                        <button onclick="switchBranch(4)" id="branch-btn-4" class="branch-btn p-4 bg-white text-slate-700 border border-slate-200 rounded-2xl shadow-sm text-left transition transform hover:-translate-y-0.5">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Cabang 04</div>
+                            <div class="font-bold text-sm mt-1">Surabaya Darmo</div>
+                            <div class="text-xs mt-2 text-emerald-600 font-extrabold">Sisa: Rp 8.100.000</div>
+                        </button>
+
+                        <button onclick="switchBranch(5)" id="branch-btn-5" class="branch-btn p-4 bg-white text-slate-700 border border-slate-200 rounded-2xl shadow-sm text-left transition transform hover:-translate-y-0.5">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Cabang 05</div>
+                            <div class="font-bold text-sm mt-1">Bali Sunset</div>
+                            <div class="text-xs mt-2 text-amber-600 font-extrabold">Sisa: Rp 2.950.000</div>
+                        </button>
+                    </div>
+
+                    <!-- Transaksi Petty Cash Cabang Aktif -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0">
+                            <div>
+                                <h3 id="branch-table-title" class="font-bold text-slate-900 text-base">Riwayat Kas Kecil - Cabang Jakarta Pusat</h3>
+                                <p class="text-xs text-slate-500">Plafon Kas: Rp 15.000.000 | Batas Minimum Top Up Kas: Rp 3.000.000</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="openModal('modal-reimburse')" class="px-3.5 py-2 bg-amber-50 text-amber-700 hover:bg-amber-100 font-bold text-xs rounded-xl transition flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-rotate"></i>
+                                    <span>Ajukan Reimburse Kas</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <th class="p-4 font-bold">Tanggal</th>
+                                        <th class="p-4 font-bold">No. Bukti / Nota</th>
+                                        <th class="p-4 font-bold">Keterangan Pengeluaran</th>
+                                        <th class="p-4 font-bold">Kategori COA</th>
+                                        <th class="p-4 font-bold text-right">Jumlah (Keluar)</th>
+                                        <th class="p-4 font-bold text-center">Bukti Nota</th>
+                                        <th class="p-4 font-bold text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">18 Jun 2026</td>
+                                        <td class="p-4 font-bold text-[#0A1E85]">PC-JKT-26-089</td>
+                                        <td class="p-4">Pembelian ATK & Kertas Printer Resep Klinik</td>
+                                        <td class="p-4"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold text-[10px]">6-102 Perlengkapan Kantor</span></td>
+                                        <td class="p-4 text-right font-extrabold text-pink-600">Rp 450.000</td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="openPreviewModal('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80')" class="text-[#0A1E85] font-bold hover:underline inline-flex items-center space-x-1">
+                                                <i class="fa-solid fa-image"></i>
+                                                <span>Lihat Nota</span>
+                                            </button>
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="alertBox('Detail transaksi petty cash')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">15 Jun 2026</td>
+                                        <td class="p-4 font-bold text-[#0A1E85]">PC-JKT-26-088</td>
+                                        <td class="p-4">Konsumsi rapat koordinasi dokter spesialis bulanan</td>
+                                        <td class="p-4"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold text-[10px]">6-105 Konsumsi Rapat</span></td>
+                                        <td class="p-4 text-right font-extrabold text-pink-600">Rp 1.250.000</td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="openPreviewModal('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80')" class="text-[#0A1E85] font-bold hover:underline inline-flex items-center space-x-1">
+                                                <i class="fa-solid fa-image"></i>
+                                                <span>Lihat Nota</span>
+                                            </button>
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="alertBox('Detail transaksi petty cash')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">10 Jun 2026</td>
+                                        <td class="p-4 font-bold text-[#0A1E85]">PC-JKT-26-087</td>
+                                        <td class="p-4">Perbaikan ringan pendingin ruangan (AC) lantai 2</td>
+                                        <td class="p-4"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold text-[10px]">6-108 Pemeliharaan Gedung</span></td>
+                                        <td class="p-4 text-right font-extrabold text-pink-600">Rp 850.000</td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="openPreviewModal('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80')" class="text-[#0A1E85] font-bold hover:underline inline-flex items-center space-x-1">
+                                                <i class="fa-solid fa-image"></i>
+                                                <span>Lihat Nota</span>
+                                            </button>
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="alertBox('Detail transaksi petty cash')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: JURNAL AKUNTANSI -->
+                <section id="tab-jurnal" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-slate-900">Jurnal Umum Akuntansi (General Journal)</h2>
+                            <p class="text-xs text-slate-500 mt-1">Pencatatan seluruh transaksi debet dan kredit secara kronologis standar enterprise.</p>
+                        </div>
+                        <button onclick="openModal('modal-jurnal')" class="bg-gradient-to-r from-[#0A1E85] to-[#5C1294] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-indigo-500/20 hover:opacity-95 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Entri Jurnal Baru</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <th class="p-4 font-bold">Tanggal & No. Ref</th>
+                                        <th class="p-4 font-bold">Keterangan / Uraian Akun</th>
+                                        <th class="p-4 font-bold text-center">Ref COA</th>
+                                        <th class="p-4 font-bold text-right">Debet (Rp)</th>
+                                        <th class="p-4 font-bold text-right">Kredit (Rp)</th>
+                                        <th class="p-4 font-bold text-center">Lampiran</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">
+                                            <div class="font-bold text-slate-900">18 Jun 2026</div>
+                                            <div class="text-[10px] text-slate-400">JU-2026-0618</div>
+                                        </td>
+                                        <td class="p-4">
+                                            <div class="font-bold text-slate-800">Beban Perlengkapan Kantor Cabang Jkt</div>
+                                            <div class="text-slate-400 pl-4">&nbsp;&nbsp;Kas Kecil Cabang Jakarta Pusat</div>
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <div class="font-mono text-slate-600">6-102</div>
+                                            <div class="font-mono text-slate-400">1-101</div>
+                                        </td>
+                                        <td class="p-4 text-right font-extrabold text-slate-900">
+                                            <div>450.000</div>
+                                            <div>-</div>
+                                        </td>
+                                        <td class="p-4 text-right font-extrabold text-slate-900">
+                                            <div>-</div>
+                                            <div>450.000</div>
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="openPreviewModal('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80')" class="text-[#0A1E85] font-bold hover:underline">Nota Invoice</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">
+                                            <div class="font-bold text-slate-900">15 Jun 2026</div>
+                                            <div class="text-[10px] text-slate-400">JU-2026-0615</div>
+                                        </td>
+                                        <td class="p-4">
+                                            <div class="font-bold text-slate-800">Kas Bank BCA Utama</div>
+                                            <div class="text-slate-400 pl-4">&nbsp;&nbsp;Pendapatan Jasa Layanan Medis</div>
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <div class="font-mono text-slate-600">1-102</div>
+                                            <div class="font-mono text-slate-400">4-101</div>
+                                        </td>
+                                        <td class="p-4 text-right font-extrabold text-slate-900">
+                                            <div>45.000.000</div>
+                                            <div>-</div>
+                                        </td>
+                                        <td class="p-4 text-right font-extrabold text-slate-900">
+                                            <div>-</div>
+                                            <div>45.000.000</div>
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <span class="text-slate-400 text-[10px]">Valid Sistem</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 5: CHART OF ACCOUNTS (COA) -->
+                <section id="tab-coa" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-slate-900">Chart of Accounts (Bagan Akun TARS)</h2>
+                            <p class="text-xs text-slate-500 mt-1">Struktur klasifikasi akun standar untuk pelaporan keuangan enterprise.</p>
+                        </div>
+                        <button onclick="alertBox('Form Tambah Akun COA Baru')" class="bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-800 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Tambah Akun COA</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <th class="p-4 font-bold">Kode Akun</th>
+                                        <th class="p-4 font-bold">Nama Akun</th>
+                                        <th class="p-4 font-bold">Klasifikasi / Kategori</th>
+                                        <th class="p-4 font-bold text-center">Posisi Normal</th>
+                                        <th class="p-4 font-bold text-right">Saldo Saat Ini (Rp)</th>
+                                        <th class="p-4 font-bold text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50 font-semibold bg-slate-50/50">
+                                        <td colspan="6" class="p-3 text-slate-900 text-xs"><i class="fa-solid fa-folder-open text-[#0A1E85] mr-2"></i> 1. ASET (ASSETS)</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold text-[#0A1E85]">1-101</td>
+                                        <td class="p-4 font-bold">Kas Kecil (Petty Cash Cabang)</td>
+                                        <td class="p-4">Aset Lancar</td>
+                                        <td class="p-4 text-center">Debet</td>
+                                        <td class="p-4 text-right font-extrabold">47.500.000</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold text-[10px]">Aktif</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold text-[#0A1E85]">1-102</td>
+                                        <td class="p-4 font-bold">Kas Bank BCA & Mandiri Utama</td>
+                                        <td class="p-4">Aset Lancar</td>
+                                        <td class="p-4 text-center">Debet</td>
+                                        <td class="p-4 text-right font-extrabold">1.437.700.000</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold text-[10px]">Aktif</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 font-semibold bg-slate-50/50">
+                                        <td colspan="6" class="p-3 text-slate-900 text-xs"><i class="fa-solid fa-folder-open text-[#5C1294] mr-2"></i> 6. BEBAN OPERASIONAL (EXPENSES)</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold text-[#5C1294]">6-102</td>
+                                        <td class="p-4 font-bold">Beban Perlengkapan & ATK</td>
+                                        <td class="p-4">Beban Operasional</td>
+                                        <td class="p-4 text-center">Debet</td>
+                                        <td class="p-4 text-right font-extrabold">18.400.000</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold text-[10px]">Aktif</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold text-[#5C1294]">6-105</td>
+                                        <td class="p-4 font-bold">Beban Konsumsi & Rapat</td>
+                                        <td class="p-4">Beban Operasional</td>
+                                        <td class="p-4 text-center">Debet</td>
+                                        <td class="p-4 text-right font-extrabold">12.900.000</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold text-[10px]">Aktif</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 6: BUKU BESAR -->
+                <section id="tab-buku-besar" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-slate-900">Buku Besar (General Ledger)</h2>
+                            <p class="text-xs text-slate-500 mt-1">Rincian mutasi transaksi per masing-masing akun dalam periode terpilih.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <select class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none">
+                                <option>1-101 - Kas Kecil Cabang</option>
+                                <option>1-102 - Kas Bank Utama</option>
+                                <option>6-102 - Beban Perlengkapan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Ledger Content Simulation -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm">Akun: 1-101 - Kas Kecil (Petty Cash)</h3>
+                                <p class="text-xs text-slate-500">Saldo Awal Periode: Rp 50.000.000</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-slate-400 font-bold">Saldo Akhir:</span>
+                                <div class="text-base font-extrabold text-[#0A1E85]">Rp 47.500.000</div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b">
+                                        <th class="p-3">Tanggal</th>
+                                        <th class="p-3">Keterangan Transaksi</th>
+                                        <th class="p-3 text-right">Debet</th>
+                                        <th class="p-3 text-right">Kredit</th>
+                                        <th class="p-3 text-right">Saldo Berjalan</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td class="p-3 font-medium">01 Jun 2026</td>
+                                        <td class="p-3">Saldo Awal Bulan Juni 2026</td>
+                                        <td class="p-3 text-right">-</td>
+                                        <td class="p-3 text-right">-</td>
+                                        <td class="p-3 text-right font-bold">50.000.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-medium">10 Jun 2026</td>
+                                        <td class="p-3">Pengeluaran Petty Cash Cabang Jakarta (ATK)</td>
+                                        <td class="p-3 text-right">-</td>
+                                        <td class="p-3 text-right text-pink-600 font-bold">450.000</td>
+                                        <td class="p-3 text-right font-bold">49.550.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-medium">15 Jun 2026</td>
+                                        <td class="p-3">Pengeluaran Petty Cash Cabang (Konsumsi)</td>
+                                        <td class="p-3 text-right">-</td>
+                                        <td class="p-3 text-right text-pink-600 font-bold">2.050.000</td>
+                                        <td class="p-3 text-right font-bold">47.500.000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 7: NERACA SALDO -->
+                <section id="tab-neraca-saldo" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-slate-900">Neraca Saldo (Trial Balance)</h2>
+                            <p class="text-xs text-slate-500 mt-1">Uji keseimbangan total saldo debet dan kredit seluruh akun.</p>
+                        </div>
+                        <button onclick="alertBox('Cetak Laporan Neraca Saldo')" class="bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-800 transition"><i class="fa-solid fa-print mr-1.5"></i> Cetak PDF</button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <th class="p-4 font-bold">Kode Akun</th>
+                                        <th class="p-4 font-bold">Nama Akun</th>
+                                        <th class="p-4 font-bold text-right">Debet (Rp)</th>
+                                        <th class="p-4 font-bold text-right">Kredit (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold">1-101</td>
+                                        <td class="p-4 font-bold">Kas Kecil (Petty Cash Cabang)</td>
+                                        <td class="p-4 text-right font-extrabold">47.500.000</td>
+                                        <td class="p-4 text-right">-</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold">1-102</td>
+                                        <td class="p-4 font-bold">Kas Bank Utama</td>
+                                        <td class="p-4 text-right font-extrabold">1.437.700.000</td>
+                                        <td class="p-4 text-right">-</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold">2-101</td>
+                                        <td class="p-4 font-bold">Utang Usaha & Operasional</td>
+                                        <td class="p-4 text-right">-</td>
+                                        <td class="p-4 text-right font-extrabold">160.600.000</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold">3-101</td>
+                                        <td class="p-4 font-bold">Modal Disetor Saham</td>
+                                        <td class="p-4 text-right">-</td>
+                                        <td class="p-4 font-extrabold">1.000.000.000</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-mono font-bold">4-101</td>
+                                        <td class="p-4 font-bold">Pendapatan Jasa Layanan</td>
+                                        <td class="p-4 text-right">-</td>
+                                        <td class="p-4 text-right font-extrabold">324.600.000</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 font-bold bg-slate-50">
+                                        <td colspan="2" class="p-4 text-right text-slate-900">TOTAL KESEIMBANGAN:</td>
+                                        <td class="p-4 text-right text-[#0A1E85] text-sm">Rp 1.485.200.000</td>
+                                        <td class="p-4 text-right text-[#0A1E85] text-sm">Rp 1.485.200.000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 8: LABA RUGI & LAPORAN -->
+                <section id="tab-laba-rugi" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-slate-900">Laporan Laba Rugi (Income Statement)</h2>
+                            <p class="text-xs text-slate-500 mt-1">Laporan komparatif pendapatan dan beban operasional perusahaan.</p>
+                        </div>
+                        <button onclick="alertBox('Ekspor Laporan Laba Rugi')" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md"><i class="fa-solid fa-file-excel mr-1.5"></i> Ekspor Excel</button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pendapatan Usaha (Revenue)</div>
+                            <div class="mt-3 space-y-2">
+                                <div class="flex justify-between text-xs py-2 border-b border-slate-100">
+                                    <span class="text-slate-700 font-medium">Pendapatan Layanan Medis & Konsultasi</span>
+                                    <span class="font-extrabold text-slate-900">Rp 1.120.000.000</span>
+                                </div>
+                                <div class="flex justify-between text-xs py-2 border-b border-slate-100">
+                                    <span class="text-slate-700 font-medium">Pendapatan Kerjasama Perusahaan & Asuransi</span>
+                                    <span class="font-extrabold text-slate-900">Rp 280.000.000</span>
+                                </div>
+                                <div class="flex justify-between text-xs py-2 font-bold bg-slate-50 px-3 rounded-lg">
+                                    <span class="text-slate-900">Total Pendapatan</span>
+                                    <span class="text-emerald-600">Rp 1.400.000.000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Beban Operasional (Expenses)</div>
+                            <div class="mt-3 space-y-2">
+                                <div class="flex justify-between text-xs py-2 border-b border-slate-100">
+                                    <span class="text-slate-700 font-medium">Beban Gaji & Tunjangan Karyawan</span>
+                                    <span class="font-extrabold text-pink-600">Rp 650.000.000</span>
+                                </div>
+                                <div class="flex justify-between text-xs py-2 border-b border-slate-100">
+                                    <span class="text-slate-700 font-medium">Beban Sewa Gedung & Cabang</span>
+                                    <span class="font-extrabold text-pink-600">Rp 240.000.000</span>
+                                </div>
+                                <div class="flex justify-between text-xs py-2 border-b border-slate-100">
+                                    <span class="text-slate-700 font-medium">Beban Operasional & Petty Cash Cabang</span>
+                                    <span class="font-extrabold text-pink-600">Rp 185.400.000</span>
+                                </div>
+                                <div class="flex justify-between text-xs py-2 font-bold bg-slate-50 px-3 rounded-lg">
+                                    <span class="text-slate-900">Total Beban Operasional</span>
+                                    <span class="text-pink-600">Rp 1.075.400.000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider">Laba Bersih (Net Profit)</span>
+                                <div class="text-xs text-emerald-600 mt-0.5">Pendapatan dikurangi total beban operasional</div>
+                            </div>
+                            <div class="text-2xl font-extrabold text-emerald-700">Rp 324.600.000</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 9: PENGAJUAN DANA -->
+                <section id="tab-pengajuan" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-slate-900">Pengajuan Dana & Approval</h2>
+                            <p class="text-xs text-slate-500 mt-1">Daftar pengajuan kebutuhan dana operasional atau proyek khusus.</p>
+                        </div>
+                        <button onclick="alertBox('Form Buat Pengajuan Dana Baru')" class="bg-[#0A1E85] text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:opacity-95 transition"><i class="fa-solid fa-plus mr-1.5"></i> Buat Pengajuan Baru</button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <th class="p-4 font-bold">ID & Tanggal</th>
+                                        <th class="p-4 font-bold">Pemohon / Unit</th>
+                                        <th class="p-4 font-bold">Keperluan</th>
+                                        <th class="p-4 font-bold text-right">Nominal (Rp)</th>
+                                        <th class="p-4 font-bold text-center">Status</th>
+                                        <th class="p-4 font-bold text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">
+                                            <div class="font-bold text-slate-900">REQ-26-041</div>
+                                            <div class="text-[10px] text-slate-400">18 Jun 2026</div>
+                                        </td>
+                                        <td class="p-4">
+                                            <div class="font-bold">Cabang Tangerang BSD</div>
+                                            <div class="text-[10px] text-slate-400">Reimburse Petty Cash</div>
+                                        </td>
+                                        <td class="p-4">Pengisian kembali kas kecil cabang yang hampir habis (Plafon Rp 15 Juta)</td>
+                                        <td class="p-4 text-right font-extrabold text-pink-600">Rp 11.600.000</td>
+                                        <td class="p-4 text-center"><span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-bold text-[10px]">Menunggu Approval</span></td>
+                                        <td class="p-4 text-center">
+                                            <button onclick="alertBox('Menyetujui Pengajuan Dana REQ-26-041')" class="px-3 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-lg hover:bg-emerald-100 mr-1">Setuju</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-medium">
+                                            <div class="font-bold text-slate-900">REQ-26-040</div>
+                                            <div class="text-[10px] text-slate-400">14 Jun 2026</div>
+                                        </td>
+                                        <td class="p-4">
+                                            <div class="font-bold">Divisi IT & Sistem</div>
+                                            <div class="text-[10px] text-slate-400">Top Up Budget Divisi</div>
+                                        </td>
+                                        <td class="p-4">Penambahan budget lisensi software server cloud enterprise</td>
+                                        <td class="p-4 text-right font-extrabold text-pink-600">Rp 25.000.000</td>
+                                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full font-bold text-[10px]">Disetujui CFO</span></td>
+                                        <td class="p-4 text-center">
+                                            <span class="text-slate-400 text-[10px]">Selesai</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL: ENTRI JURNAL BARU -->
+    <div id="modal-jurnal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Entri Jurnal Akuntansi Baru</h3>
+                <button onclick="closeModal('modal-jurnal')" class="text-slate-400 hover:text-slate-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'modal-jurnal', 'Berhasil menyimpan entri jurnal akuntansi!')" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Tanggal Transaksi</label>
+                    <input type="date" value="2026-06-19" class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none focus:ring-2 focus:ring-[#0A1E85]" required>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Akun Debet</label>
+                        <select class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none">
+                            <option>6-102 - Beban Perlengkapan</option>
+                            <option>1-101 - Kas Kecil Cabang</option>
+                            <option>1-102 - Kas Bank Utama</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Akun Kredit</label>
+                        <select class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none">
+                            <option>1-101 - Kas Kecil Cabang</option>
+                            <option>1-102 - Kas Bank Utama</option>
+                            <option>2-101 - Utang Usaha</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nominal Transaksi (Rp)</label>
+                    <input type="number" placeholder="Contoh: 500000" class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none" required>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Uraian / Keterangan Transaksi</label>
+                    <textarea rows="2" placeholder="Tuliskan keterangan detail transaksi..." class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none" required></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Upload Bukti Nota / Invoice</label>
+                    <input type="file" class="w-full border border-slate-300 rounded-xl p-2 text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-[#0A1E85] hover:file:bg-indigo-100">
+                </div>
+                <div class="pt-3 flex space-x-3">
+                    <button type="button" onclick="closeModal('modal-jurnal')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">Batal</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-gradient-to-r from-[#0A1E85] to-[#5C1294] text-white font-bold rounded-xl shadow-md transition">Simpan Jurnal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: TOP UP DANA DIVISI -->
+    <div id="modal-topup-divisi" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Top Up & Penambahan Dana Divisi</h3>
+                <button onclick="closeModal('modal-topup-divisi')" class="text-slate-400 hover:text-slate-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'modal-topup-divisi', 'Berhasil mengajukan Top Up Dana Divisi!')" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Pilih Divisi Tujuan</label>
+                    <select class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none">
+                        <option>Divisi Operasional & Medis</option>
+                        <option>Divisi Pemasaran & Growth</option>
+                        <option>Divisi IT & Pengembangan Sistem</option>
+                        <option>Divisi HRD & General Affairs</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nominal Top Up (Rp)</label>
+                    <input type="number" placeholder="Contoh: 25000000" class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none" required>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Keperluan / Alasan Penambahan Budget</label>
+                    <textarea rows="2" placeholder="Jelaskan peruntukan dana divisi..." class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none" required></textarea>
+                </div>
+                <div class="pt-3 flex space-x-3">
+                    <button type="button" onclick="closeModal('modal-topup-divisi')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">Batal</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-gradient-to-r from-[#0A1E85] to-[#5C1294] text-white font-bold rounded-xl shadow-md transition">Ajukan Top Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: PETTY CASH CABANG -->
+    <div id="modal-petty-cash" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Catat Pengeluaran Petty Cash Cabang</h3>
+                <button onclick="closeModal('modal-petty-cash')" class="text-slate-400 hover:text-slate-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'modal-petty-cash', 'Berhasil mencatat pengeluaran kas kecil cabang!')" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Pilih Cabang</label>
+                    <select class="w-full border border-slate-300 rounded-xl p-2.5 font-medium focus:outline-none">
+                        <option>Cabang Jakarta Pusat</option>
+                        <option>Cabang Tangerang BSD</option>
+                        <option>Cabang Bandung Riau</option>
+                        <option>Cabang Surabaya Darmo</option>
+                        <option>Cabang Bali Sunset</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Tanggal Nota</label>
+                        <input type="date" value="2026-06-19" class="w-full border border-slate-300 rounded-xl p-2.5 font-medium" required>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nominal Keluar (Rp)</label>
+                        <input type="number" placeholder="Contoh: 150000" class="w-full border border-slate-300 rounded-xl p-2.5 font-medium" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Keterangan Pengeluaran</label>
+                    <input type="text" placeholder="Contoh: Pembelian konsumsi / ATK" class="w-full border border-slate-300 rounded-xl p-2.5 font-medium" required>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Upload Bukti Nota / Foto Struk</label>
+                    <input type="file" class="w-full border border-slate-300 rounded-xl p-2 text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-pink-50 file:text-[#D90479] hover:file:bg-pink-100" required>
+                </div>
+                <div class="pt-3 flex space-x-3">
+                    <button type="button" onclick="closeModal('modal-petty-cash')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">Batal</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-gradient-to-r from-[#5C1294] to-[#D90479] text-white font-bold rounded-xl shadow-md transition">Catat Pengeluaran</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: PREVIEW GAMBAR NOTA / INVOICE -->
+    <div id="modal-preview" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Pratinjau Bukti Nota / Invoice</h3>
+                <button onclick="closeModal('modal-preview')" class="text-slate-400 hover:text-slate-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="bg-slate-100 rounded-2xl overflow-hidden p-2 flex items-center justify-center min-h-[300px]">
+                <img id="preview-img" src="" alt="Pratinjau Nota" class="max-h-[400px] object-contain rounded-xl shadow">
+            </div>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeModal('modal-preview')" class="px-5 py-2 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition">Tutup Pratinjau</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Interactivity & Logic -->
+    <script>
+        
+        // Navigation Handler
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            // Show target tab
+            const target = document.getElementById('tab-' + tabId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update sidebar active states
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('text-white', 'bg-gradient-to-r', 'from-[#0A1E85]', 'to-[#5C1294]', 'shadow-md');
+                item.classList.add('text-slate-400');
+            });
+            
+            // Find current clicked/active
+            event && event.currentTarget && event.currentTarget.classList.add('text-white', 'bg-gradient-to-r', 'from-[#0A1E85]', 'to-[#5C1294]', 'shadow-md');
+
+            // Update Header Title
+            const titles = {
+                'dashboard': 'Dashboard Utama',
+                'divisi-budget': 'Top Up & Budget Divisi',
+                'petty-cash': 'Petty Cash Cabang',
+                'jurnal': 'Jurnal Akuntansi',
+                'coa': 'Chart of Accounts (COA)',
+                'buku-besar': 'Buku Besar (Ledger)',
+                'neraca-saldo': 'Neraca Saldo',
+                'laba-rugi': 'Laporan Laba Rugi',
+                'pengajuan': 'Pengajuan Dana & Approval'
+            };
+            document.getElementById('page-title').innerText = titles[tabId] || 'Dashboard TARS';
+
+            // Close mobile sidebar if open
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        // Branch Switcher for Petty Cash
+        function switchBranch(branchId) {
+            const names = {
+                1: 'Cabang Jakarta Pusat',
+                2: 'Cabang Tangerang BSD',
+                3: 'Cabang Bandung Riau',
+                4: 'Cabang Surabaya Darmo',
+                5: 'Cabang Bali Sunset'
+            };
+            document.getElementById('branch-table-title').innerText = `Riwayat Kas Kecil - ${names[branchId]}`;
+            
+            // Highlight buttons
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`branch-btn-${i}`);
+                if (i === branchId) {
+                    btn.className = "branch-btn p-4 bg-gradient-to-br from-[#0A1E85] to-[#5C1294] text-white rounded-2xl shadow-md text-left transition transform hover:-translate-y-0.5";
+                } else {
+                    btn.className = "branch-btn p-4 bg-white text-slate-700 border border-slate-200 rounded-2xl shadow-sm text-left transition transform hover:-translate-y-0.5";
+                }
+            }
+        }
+
+        // Modal Handlers
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function openPreviewModal(imgSrc) {
+            document.getElementById('preview-img').src = imgSrc;
+            openModal('modal-preview');
+        }
+
+        function handleFormSubmit(event, modalId, successMessage) {
+            event.preventDefault();
+            closeModal(modalId);
+            alertBox(successMessage);
+        }
+
+        function alertBox(message) {
+            // Professional custom toast simulation or nice notification alert
+            const div = document.createElement('div');
+            div.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-xs font-bold animate-bounce";
+            div.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-base"></i><span>${message}</span>`;
+            document.body.appendChild(div);
+            setTimeout(() => {
+                div.remove();
+            }, 3500);
+        }
+
+        function applyGlobalFilter() {
+            const val = document.getElementById('global-date-filter').value;
+            alertBox(`Periode berhasil diperbarui sesuai filter: ${val}`);
+        }
+    </script>
+</body>
+</html>
